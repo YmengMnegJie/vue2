@@ -15,7 +15,7 @@
         <el-form-item label="用户密码" prop="password">
           <el-input type="password" v-model="ruleForm.password" />
         </el-form-item>
-        <el-form-item label="验证码" label-width="80px">
+        <el-form-item label="验证码" prop="code" label-width="80px">
           <el-input style="width: 200px" v-model="ruleForm.code" />
           <img class="img" :src="imgtoken.list.captchaImg" alt="" />
         </el-form-item>
@@ -32,9 +32,12 @@
 import { login, captcha } from '../api/user'
 import { reactive, ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 const ruleFormRef = ref()
+
 const ruleForm = reactive({
   username: 'test',
   password: '1234567',
@@ -44,7 +47,7 @@ const ruleForm = reactive({
 const imgtoken = reactive({
   list: store.state.list
 })
-console.log(ruleForm)
+
 // 效验
 const rules = {
   username: [
@@ -62,17 +65,28 @@ const rules = {
       trigger: 'blur'
     },
     { min: 3, max: 7, message: '字 符 在 3 到 7 以 内', trigger: 'blur' }
+  ],
+  code: [
+    {
+      required: true,
+      message: '请输入验证码',
+      trigger: 'blur'
+    }
   ]
 }
 // 登陆点击事件
 const submitForm = async () => {
-  console.log(ruleFormRef.value)
   if (!ruleFormRef.value) return
   await ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
-      login(ruleForm)
+      login(ruleForm).then((res) => {
+        console.log(res.data)
+        if (res.data.code === 200) {
+          router.push('/home')
+        }
+      })
     } else {
-      console.log('error submit!', fields)
+      console.log('验证码不正确')
     }
   })
 }
