@@ -28,7 +28,7 @@
       </el-menu>
     </div>
     <div class="right">
-      <div class="top">啊啊啊啊啊</div>
+      <div class="top">啊啊啊啊啊啊啊</div>
       <div class="min"></div>
     </div>
   </div>
