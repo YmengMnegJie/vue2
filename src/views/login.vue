@@ -80,9 +80,9 @@ const submitForm = async () => {
   await ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       login(ruleForm).then((res) => {
-        console.log(res.data)
+        localStorage.setItem('token', res.headers.authorization)
         if (res.data.code === 200) {
-          router.push('/home')
+          router.push('/index')
         }
       })
     } else {
