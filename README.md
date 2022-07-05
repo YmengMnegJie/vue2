@@ -1,4 +1,4 @@
-# demo
+# universal-template-system
 
 ## Project setup
 ```
